@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>WW Points Modern Calculator</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #f2f2f7; min-height: 100vh; padding: 20px 0 40px; }
+  .phone { max-width: 390px; margin: 0 auto; background: #f2f2f7; }
+  .app-header { background: #fff; padding: 20px 20px 16px; border-bottom: 1px solid #e5e5ea; margin-bottom: 20px; }
+  .app-title { font-size: 28px; font-weight: 700; color: #1c1c1e; }
+  .app-sub { font-size: 14px; color: #8e8e93; margin-top: 2px; }
+  .section-label { font-size: 12px; font-weight: 600; color: #8e8e93; text-transform: uppercase; letter-spacing: 0.05em; padding: 0 20px; margin-bottom: 8px; }
+  .card { background: #fff; border-radius: 12px; margin: 0 16px 20px; overflow: hidden; }
+  .input-row { display: flex; align-items: center; padding: 12px 16px; border-bottom: 0.5px solid #e5e5ea; gap: 12px; }
+  .input-row:last-child { border-bottom: none; }
+  .row-icon { width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .row-text { flex: 1; }
+  .row-name { font-size: 15px; color: #1c1c1e; }
+  .row-hint { font-size: 12px; color: #8e8e93; }
+  .row-input-wrap { display: flex; align-items: center; gap: 4px; }
+  input[type=number] { width: 68px; background: #f2f2f7; border: 1px solid #d1d1d6; border-radius: 8px; padding: 6px 8px; font-size: 16px; font-weight: 600; color: #1c1c1e; text-align: right; -webkit-appearance: none; }
+  input[type=number]:focus { outline: none; border-color: #007aff; }
+  .unit { font-size: 13px; color: #8e8e93; width: 14px; }
+  .result-card { margin: 0 16px 20px; background: #007aff; border-radius: 16px; padding: 24px 20px; text-align: center; }
+  .result-label { font-size: 14px; color: rgba(255,255,255,0.8); margin-bottom: 4px; }
+  .result-number { font-size: 72px; font-weight: 700; color: #fff; line-height: 1; }
+  .result-word { font-size: 20px; color: rgba(255,255,255,0.85); margin-top: 4px; margin-bottom: 16px; }
+  .breakdown { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .pill { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+  .pill-bad { background: rgba(255,59,48,0.3); color: #ffb3af; }
+  .pill-good { background: rgba(52,199,89,0.3); color: #a8f5be; }
+  .tracker-card { background: #fff; border-radius: 12px; margin: 0 16px 20px; padding: 16px; }
+  .tracker-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .tracker-label { flex: 1; font-size: 15px; color: #1c1c1e; }
+  .bar-bg { background: #e5e5ea; border-radius: 4px; height: 10px; overflow: hidden; margin-bottom: 6px; }
+  .bar-fill { height: 10px; border-radius: 4px; background: #007aff; width: 0%; transition: width 0.3s, background 0.3s; }
+  .bar-stats { display: flex; justify-content: space-between; font-size: 13px; color: #8e8e93; }
+  .tracker-msg { font-size: 13px; color: #8e8e93; margin-bottom: 10px; }
+  .budget-badge { background: #e8f4ff; border-radius: 10px; padding: 10px 14px; margin: 0 16px 16px; display: flex; align-items: center; gap: 10px; }
+  .badge-icon { font-size: 20px; }
+  .badge-text { font-size: 13px; color: #185FA5; line-height: 1.4; }
+  .badge-text strong { font-weight: 700; }
+  .btn-reset { display: block; width: calc(100% - 32px); margin: 0 16px 12px; background: #fff; border: 1px solid #d1d1d6; border-radius: 12px; padding: 14px; font-size: 16px; color: #ff3b30; font-weight: 600; cursor: pointer; font-family: inherit; }
+  .footnote { font-size: 12px; color: #8e8e93; text-align: center; padding: 0 20px; line-height: 1.5; }
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="app-header">
+    <div class="app-title">WW Points Modern</div>
+    <div class="app-sub">Enter values from the nutrition label</div>
+  </div>
+  <div class="budget-badge">
+    <span class="badge-icon">🎯</span>
+    <span class="badge-text"><strong>Your daily budget: 37 points</strong><br>Male · 6'7" · 245 lbs · Lightly active · 65+</span>
+  </div>
+  <div class="section-label">Nutrition facts</div>
+  <div class="card">
+    <div class="input-row">
+      <div class="row-icon" style="background:#fff0f0;">🔥</div>
+      <div class="row-text"><div class="row-name">Calories</div><div class="row-hint">Adds points</div></div>
+      <div class="row-input-wrap"><input type="number" id="cal" value="0" min="0" step="1" oninput="calc()"><span class="unit"></span></div>
+    </div>
+    <div class="input-row">
+      <div class="row-icon" style="background:#fff8e6;">🧈</div>
+      <div class="row-text"><div class="row-name">Saturated fat</div><div class="row-hint">Adds points</div></div>
+      <div class="row-input-wrap"><input type="number" id="satfat" value="0" min="0" step="0.1" oninput="calc()"><span class="unit">g</span></div>
+    </div>
+    <div class="input-row">
+      <div class="row-icon" style="background:#fff0f0;">🍬</div>
+      <div class="row-text"><div class="row-name">Added sugar</div><div class="row-hint">Adds points</div></div>
+      <div class="row-input-wrap"><input type="number" id="sugar" value="0" min="0" step="0.1" oninput="calc()"><span class="unit">g</span></div>
+    </div>
+    <div class="input-row">
+      <div class="row-icon" style="background:#e8f4ff;">💪</div>
+      <div class="row-text"><div class="row-name">Protein</div><div class="row-hint">Lowers points</div></div>
+      <div class="row-input-wrap"><input type="number" id="protein" value="0" min="0" step="0.1" oninput="calc()"><span class="unit">g</span></div>
+    </div>
+    <div class="input-row">
+      <div class="row-icon" style="background:#edfff3;">🌾</div>
+      <div class="row-text"><div class="row-name">Fiber</div><div class="row-hint">Lowers points</div></div>
+      <div class="row-input-wrap"><input type="number" id="fiber" value="0" min="0" step="0.1" oninput="calc()"><span class="unit">g</span></div>
+    </div>
+    <div class="input-row">
+      <div class="row-icon" style="background:#e5fdf6;">🥑</div>
+      <div class="row-text"><div class="row-name">Unsaturated fat</div><div class="row-hint">Total − sat − trans fat</div></div>
+      <div class="row-input-wrap"><input type="number" id="unsat" value="0" min="0" step="0.1" oninput="calc()"><span class="unit">g</span></div>
+    </div>
+  </div>
+  <div class="result-card">
+    <div class="result-label">WW Points Modern</div>
+    <div class="result-number" id="pts">0</div>
+    <div class="result-word" id="pts-word">points</div>
+    <div class="breakdown">
+      <span class="pill pill-bad" id="p-sat">Sat fat +0.0</span>
+      <span class="pill pill-bad" id="p-sug">Sugar +0.0</span>
+      <span class="pill pill-good" id="p-pro">Protein −0.0</span>
+      <span class="pill pill-good" id="p-fib">Fiber −0.0</span>
+    </div>
+  </div>
+  <div class="section-label">Daily tracker</div>
+  <div class="tracker-card">
+    <div class="tracker-row">
+      <span class="tracker-label">Daily budget</span>
+      <input type="number" id="budget" value="37" min="1" step="1" oninput="calc()" style="width:68px;">
+      <span class="unit">pts</span>
+    </div>
+    <div class="tracker-row">
+      <span class="tracker-label">Already used today</span>
+      <input type="number" id="used" value="0" min="0" step="1" oninput="calc()" style="width:68px;">
+      <span class="unit">pts</span>
+    </div>
+    <div class="tracker-msg" id="tracker-msg">Enter your values above to track your budget.</div>
+    <div class="bar-bg"><div class="bar-fill" id="bar"></div></div>
+    <div class="bar-stats"><span id="b-used">0 used</span><span id="b-left">37 remaining</span></div>
+  </div>
+  <button class="btn-reset" onclick="resetAll()">Reset all fields</button>
+  <p class="footnote">Formula estimates only. Zero-point foods (eggs, fruit, veggies, lean proteins) — enter 0. Always verify with the official WW app.</p>
+</div>
+<script>
+function calc() {
+  var cal    = parseFloat(document.getElementById('cal').value)    || 0;
+  var satfat = parseFloat(document.getElementById('satfat').value) || 0;
+  var sugar  = parseFloat(document.getElementById('sugar').value)  || 0;
+  var protein= parseFloat(document.getElementById('protein').value)|| 0;
+  var fiber  = parseFloat(document.getElementById('fiber').value)  || 0;
+  var unsat  = parseFloat(document.getElementById('unsat').value)  || 0;
+  var raw = (cal/50) + (satfat/13) + (sugar/10) - (protein/25) - (fiber/14) - (unsat/40);
+  var pts = Math.max(0, Math.round(raw));
+  document.getElementById('pts').textContent = pts;
+  document.getElementById('pts-word').textContent = pts === 1 ? 'point' : 'points';
+  document.getElementById('p-sat').textContent = 'Sat fat +' + (satfat/13).toFixed(1);
+  document.getElementById('p-sug').textContent = 'Sugar +'   + (sugar/10).toFixed(1);
+  document.getElementById('p-pro').textContent = 'Protein −' + (protein/25).toFixed(1);
+  document.getElementById('p-fib').textContent = 'Fiber −'   + (fiber/14).toFixed(1);
+  var budget = parseInt(document.getElementById('budget').value) || 37;
+  var used   = parseInt(document.getElementById('used').value)   || 0;
+  var total  = used + pts;
+  var remaining = Math.max(0, budget - total);
+  var pct = Math.min(100, Math.round((total / budget) * 100));
+  document.getElementById('b-used').textContent = total + ' used';
+  document.getElementById('b-left').textContent = remaining + ' remaining';
+  document.getElementById('bar').style.width = pct + '%';
+  document.getElementById('bar').style.background = pct >= 100 ? '#ff3b30' : pct > 85 ? '#ff9500' : '#007aff';
+  var msg = pct >= 100 ? 'Budget reached — use your weekly flex points!' : pct > 85 ? 'Getting close to your daily limit.' : total === 0 ? 'Enter food values and points used today.' : "You're on track for the day.";
+  document.getElementById('tracker-msg').textContent = msg;
+}
+function resetAll() {
+  ['cal','satfat','sugar','protein','fiber','unsat','used'].forEach(function(id){ document.getElementById(id).value = 0; });
+  document.getElementById('budget').value = 37;
+  calc();
+}
+</script>
+</body>
+</html>
