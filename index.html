@@ -3,35 +3,44 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>WW Points Modern Calculator</title>
+<title>WW Points Modern</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #f2f2f7; min-height: 100vh; padding: 20px 0 40px; }
-  .phone { max-width: 390px; margin: 0 auto; background: #f2f2f7; }
-  .app-header { background: #fff; padding: 20px 20px 16px; border-bottom: 1px solid #e5e5ea; margin-bottom: 20px; }
-  .app-title { font-size: 28px; font-weight: 700; color: #1c1c1e; }
-  .app-sub { font-size: 14px; color: #8e8e93; margin-top: 2px; }
-  .section-label { font-size: 12px; font-weight: 600; color: #8e8e93; text-transform: uppercase; letter-spacing: 0.05em; padding: 0 20px; margin-bottom: 8px; }
-  .card { background: #fff; border-radius: 12px; margin: 0 16px 20px; overflow: hidden; }
+  body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #f2f2f7; min-height: 100vh; }
+  .phone { max-width: 390px; margin: 0 auto; background: #f2f2f7; padding-bottom: 90px; }
+  .app-header { background: #007aff; padding: 20px 20px 16px; text-align: center; }
+  .app-title { font-size: 22px; font-weight: 700; color: #fff; }
+  .app-sub { font-size: 13px; color: rgba(255,255,255,0.8); margin-top: 2px; }
+  .tab-bar { display: flex; background: #fff; border-bottom: 0.5px solid #e5e5ea; position: sticky; top: 0; z-index: 10; }
+  .tab { flex: 1; padding: 12px 4px; text-align: center; font-size: 11px; font-weight: 600; color: #8e8e93; cursor: pointer; border-bottom: 2px solid transparent; }
+  .tab.active { color: #007aff; border-bottom: 2px solid #007aff; }
+  .panel { display: none; padding: 16px 0; }
+  .panel.active { display: block; }
+  .section-label { font-size: 12px; font-weight: 600; color: #8e8e93; text-transform: uppercase; letter-spacing: 0.05em; padding: 0 20px; margin-bottom: 8px; margin-top: 16px; }
+  .card { background: #fff; border-radius: 12px; margin: 0 16px 16px; overflow: hidden; }
   .input-row { display: flex; align-items: center; padding: 12px 16px; border-bottom: 0.5px solid #e5e5ea; gap: 12px; }
   .input-row:last-child { border-bottom: none; }
   .row-icon { width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
   .row-text { flex: 1; }
   .row-name { font-size: 15px; color: #1c1c1e; }
   .row-hint { font-size: 12px; color: #8e8e93; }
-  .row-input-wrap { display: flex; align-items: center; gap: 4px; }
-  input[type=number] { width: 78px; background: #f2f2f7; border: 1px solid #d1d1d6; border-radius: 8px; padding: 6px 8px; font-size: 16px; font-weight: 600; color: #1c1c1e; text-align: right; -webkit-appearance: none; }
-  input[type=number]:focus { outline: none; border-color: #007aff; }
-  .unit { font-size: 13px; color: #8e8e93; width: 30px; }
-  .result-card { margin: 0 16px 20px; background: #007aff; border-radius: 16px; padding: 24px 20px; text-align: center; }
+  input[type=number], select { background: #f2f2f7; border: 1px solid #d1d1d6; border-radius: 8px; padding: 6px 8px; font-size: 15px; font-weight: 600; color: #1c1c1e; text-align: right; -webkit-appearance: none; font-family: inherit; }
+  input[type=number] { width: 78px; }
+  select { width: 120px; font-size: 13px; text-align: left; }
+  input[type=number]:focus, select:focus { outline: none; border-color: #007aff; }
+  .unit { font-size: 13px; color: #8e8e93; width: 30px; flex-shrink: 0; }
+  .result-card { margin: 0 16px 16px; background: #007aff; border-radius: 16px; padding: 20px; text-align: center; }
   .result-label { font-size: 14px; color: rgba(255,255,255,0.8); margin-bottom: 4px; }
-  .result-number { font-size: 72px; font-weight: 700; color: #fff; line-height: 1; }
-  .result-word { font-size: 20px; color: rgba(255,255,255,0.85); margin-top: 4px; margin-bottom: 16px; }
-  .breakdown { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
-  .pill { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+  .result-number { font-size: 64px; font-weight: 700; color: #fff; line-height: 1; }
+  .result-word { font-size: 18px; color: rgba(255,255,255,0.85); margin-top: 4px; margin-bottom: 14px; }
+  .breakdown { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+  .pill { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
   .pill-bad { background: rgba(255,59,48,0.3); color: #ffb3af; }
   .pill-good { background: rgba(52,199,89,0.3); color: #a8f5be; }
-  .tracker-card { background: #fff; border-radius: 12px; margin: 0 16px 20px; padding: 16px; }
+  .budget-result { margin: 0 16px 16px; background: #34c759; border-radius: 16px; padding: 20px; text-align: center; }
+  .budget-breakdown { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 12px; }
+  .budget-pill { background: rgba(255,255,255,0.25); color: #fff; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+  .tracker-card { background: #fff; border-radius: 12px; margin: 0 16px 16px; padding: 16px; }
   .tracker-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
   .tracker-label { flex: 1; font-size: 15px; color: #1c1c1e; }
   .step-bonus { border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; font-size: 13px; }
@@ -39,95 +48,271 @@
   .bar-fill { height: 10px; border-radius: 4px; background: #007aff; width: 0%; transition: width 0.3s, background 0.3s; }
   .bar-stats { display: flex; justify-content: space-between; font-size: 13px; color: #8e8e93; }
   .tracker-msg { font-size: 13px; color: #8e8e93; margin-bottom: 10px; }
+  .tip-card { background: #fff; border-radius: 12px; margin: 0 16px 12px; padding: 14px 16px; }
+  .tip-title { font-size: 15px; font-weight: 600; color: #1c1c1e; margin-bottom: 6px; }
+  .tip-text { font-size: 14px; color: #3c3c43; line-height: 1.5; }
+  .tip-icon { font-size: 22px; margin-bottom: 6px; }
+  .zero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0 16px 16px; }
+  .zero-item { background: #fff; border-radius: 10px; padding: 10px 12px; font-size: 13px; color: #1c1c1e; display: flex; align-items: center; gap: 8px; }
+  .zero-item span { font-size: 18px; }
+  .btn-calc { display: block; width: calc(100% - 32px); margin: 0 16px 12px; background: #007aff; border: none; border-radius: 12px; padding: 14px; font-size: 16px; color: #fff; font-weight: 600; cursor: pointer; font-family: inherit; }
   .btn-reset { display: block; width: calc(100% - 32px); margin: 0 16px 12px; background: #fff; border: 1px solid #d1d1d6; border-radius: 12px; padding: 14px; font-size: 16px; color: #ff3b30; font-weight: 600; cursor: pointer; font-family: inherit; }
-  .btn-reset:active { opacity: 0.7; }
-  .footnote { font-size: 12px; color: #8e8e93; text-align: center; padding: 0 20px; line-height: 1.5; }
+  .btn-calc:active, .btn-reset:active { opacity: 0.7; }
+  .footnote { font-size: 12px; color: #8e8e93; text-align: center; padding: 0 20px 16px; line-height: 1.5; }
+  .weekly-box { background: #fff3cd; border-radius: 12px; margin: 0 16px 16px; padding: 14px 16px; }
+  .weekly-box .tip-title { color: #856404; }
+  .weekly-box .tip-text { color: #856404; }
 </style>
 </head>
 <body>
 <div class="phone">
   <div class="app-header">
     <div class="app-title">WW Points Modern</div>
-    <div class="app-sub">Enter values from the nutrition label</div>
+    <div class="app-sub">Personal Points Calculator</div>
   </div>
-  <div class="section-label">Nutrition facts</div>
-  <div class="card">
-    <div class="input-row">
-      <div class="row-icon" style="background:#fff0f0;">🔥</div>
-      <div class="row-text"><div class="row-name">Calories</div><div class="row-hint">Adds points</div></div>
-      <div class="row-input-wrap"><input type="number" id="cal" value="0" min="0" step="1" oninput="calc()"><span class="unit"></span></div>
-    </div>
-    <div class="input-row">
-      <div class="row-icon" style="background:#fff8e6;">🧈</div>
-      <div class="row-text"><div class="row-name">Saturated fat</div><div class="row-hint">Adds points</div></div>
-      <div class="row-input-wrap"><input type="number" id="satfat" value="0" min="0" step="0.1" oninput="calc()"><span class="unit">g</span></div>
-    </div>
-    <div class="input-row">
-      <div class="row-icon" style="background:#fff0f0;">🍬</div>
-      <div class="row-text"><div class="row-name">Added sugar</div><div class="row-hint">Adds points</div></div>
-      <div class="row-input-wrap"><input type="number" id="sugar" value="0" min="0" step="0.1" oninput="calc()"><span class="unit">g</span></div>
-    </div>
-    <div class="input-row">
-      <div class="row-icon" style="background:#e8f4ff;">💪</div>
-      <div class="row-text"><div class="row-name">Protein</div><div class="row-hint">Lowers points</div></div>
-      <div class="row-input-wrap"><input type="number" id="protein" value="0" min="0" step="0.1" oninput="calc()"><span class="unit">g</span></div>
-    </div>
-    <div class="input-row">
-      <div class="row-icon" style="background:#edfff3;">🌾</div>
-      <div class="row-text"><div class="row-name">Fiber</div><div class="row-hint">Lowers points</div></div>
-      <div class="row-input-wrap"><input type="number" id="fiber" value="0" min="0" step="0.1" oninput="calc()"><span class="unit">g</span></div>
-    </div>
-    <div class="input-row">
-      <div class="row-icon" style="background:#e5fdf6;">🥑</div>
-      <div class="row-text"><div class="row-name">Unsaturated fat</div><div class="row-hint">Total - sat - trans fat</div></div>
-      <div class="row-input-wrap"><input type="number" id="unsat" value="0" min="0" step="0.1" oninput="calc()"><span class="unit">g</span></div>
-    </div>
+  <div class="tab-bar">
+    <div class="tab active" onclick="showTab('calculator',this)">Calculator</div>
+    <div class="tab" onclick="showTab('tracker',this)">Tracker</div>
+    <div class="tab" onclick="showTab('budget',this)">My Budget</div>
+    <div class="tab" onclick="showTab('tips',this)">Tips</div>
   </div>
-  <div class="result-card">
-    <div class="result-label">WW Points Modern</div>
-    <div class="result-number" id="pts">0</div>
-    <div class="result-word" id="pts-word">points</div>
-    <div class="breakdown">
-      <span class="pill pill-bad" id="p-sat">Sat fat +0.0</span>
-      <span class="pill pill-bad" id="p-sug">Sugar +0.0</span>
-      <span class="pill pill-good" id="p-pro">Protein -0.0</span>
-      <span class="pill pill-good" id="p-fib">Fiber -0.0</span>
+
+  <!-- CALCULATOR TAB -->
+  <div class="panel active" id="tab-calculator">
+    <div class="section-label">Nutrition facts</div>
+    <div class="card">
+      <div class="input-row">
+        <div class="row-icon" style="background:#fff0f0;">🔥</div>
+        <div class="row-text"><div class="row-name">Calories</div><div class="row-hint">Adds points</div></div>
+        <input type="number" id="cal" value="0" min="0" step="1" oninput="calcFood()">
+        <span class="unit"></span>
+      </div>
+      <div class="input-row">
+        <div class="row-icon" style="background:#fff8e6;">🧈</div>
+        <div class="row-text"><div class="row-name">Saturated fat</div><div class="row-hint">Adds points</div></div>
+        <input type="number" id="satfat" value="0" min="0" step="0.1" oninput="calcFood()">
+        <span class="unit">g</span>
+      </div>
+      <div class="input-row">
+        <div class="row-icon" style="background:#fff0f0;">🍬</div>
+        <div class="row-text"><div class="row-name">Added sugar</div><div class="row-hint">Adds points</div></div>
+        <input type="number" id="sugar" value="0" min="0" step="0.1" oninput="calcFood()">
+        <span class="unit">g</span>
+      </div>
+      <div class="input-row">
+        <div class="row-icon" style="background:#e8f4ff;">💪</div>
+        <div class="row-text"><div class="row-name">Protein</div><div class="row-hint">Lowers points</div></div>
+        <input type="number" id="protein" value="0" min="0" step="0.1" oninput="calcFood()">
+        <span class="unit">g</span>
+      </div>
+      <div class="input-row">
+        <div class="row-icon" style="background:#edfff3;">🌾</div>
+        <div class="row-text"><div class="row-name">Fiber</div><div class="row-hint">Lowers points</div></div>
+        <input type="number" id="fiber" value="0" min="0" step="0.1" oninput="calcFood()">
+        <span class="unit">g</span>
+      </div>
+      <div class="input-row">
+        <div class="row-icon" style="background:#e5fdf6;">🥑</div>
+        <div class="row-text"><div class="row-name">Unsaturated fat</div><div class="row-hint">Total - sat - trans fat</div></div>
+        <input type="number" id="unsat" value="0" min="0" step="0.1" oninput="calcFood()">
+        <span class="unit">g</span>
+      </div>
     </div>
+    <div class="result-card">
+      <div class="result-label">WW Points Modern</div>
+      <div class="result-number" id="pts">0</div>
+      <div class="result-word" id="pts-word">points</div>
+      <div class="breakdown">
+        <span class="pill pill-bad" id="p-sat">Sat fat +0.0</span>
+        <span class="pill pill-bad" id="p-sug">Sugar +0.0</span>
+        <span class="pill pill-good" id="p-pro">Protein -0.0</span>
+        <span class="pill pill-good" id="p-fib">Fiber -0.0</span>
+      </div>
+    </div>
+    <button class="btn-reset" onclick="resetFood()">Reset fields</button>
+    <p class="footnote">Zero-point foods (eggs, fruit, veggies, lean proteins, fish, oats, potatoes) - enter 0. Always verify with the official WW app.</p>
   </div>
-  <div class="section-label">Daily tracker</div>
-  <div class="tracker-card">
-    <div class="tracker-row">
-      <span class="tracker-label">Daily budget</span>
-      <input type="number" id="budget" value="37" min="1" step="1" oninput="calc()" style="width:78px;">
-      <span class="unit">pts</span>
+
+  <!-- TRACKER TAB -->
+  <div class="panel" id="tab-tracker">
+    <div class="section-label">Daily tracker</div>
+    <div class="tracker-card">
+      <div class="tracker-row">
+        <span class="tracker-label">Daily budget</span>
+        <input type="number" id="budget" value="37" min="1" step="1" oninput="calcTracker()" style="width:78px;">
+        <span class="unit">pts</span>
+      </div>
+      <div class="tracker-row">
+        <span class="tracker-label">Steps today</span>
+        <input type="number" id="steps" value="0" min="0" step="100" oninput="calcTracker()" style="width:78px;">
+        <span class="unit">steps</span>
+      </div>
+      <div class="step-bonus" id="step-bonus" style="background:#f2f2f7;color:#8e8e93;">Walk 7,000+ steps to earn +2 bonus points</div>
+      <div class="tracker-row">
+        <span class="tracker-label">Points used so far</span>
+        <input type="number" id="used" value="0" min="0" step="1" oninput="calcTracker()" style="width:78px;">
+        <span class="unit">pts</span>
+      </div>
+      <div class="tracker-msg" id="tracker-msg">Enter your points used today.</div>
+      <div class="bar-bg"><div class="bar-fill" id="bar"></div></div>
+      <div class="bar-stats"><span id="b-used">0 used</span><span id="b-left">37 remaining</span></div>
     </div>
-    <div class="tracker-row">
-      <span class="tracker-label">Steps today</span>
-      <input type="number" id="steps" value="0" min="0" step="100" oninput="calc()" style="width:78px;">
-      <span class="unit">steps</span>
+    <div class="section-label">Weekly flex points</div>
+    <div class="tracker-card">
+      <div class="tracker-row">
+        <span class="tracker-label">Weekly allowance</span>
+        <input type="number" id="weekly" value="28" min="0" step="1" oninput="calcWeekly()" style="width:78px;">
+        <span class="unit">pts</span>
+      </div>
+      <div class="tracker-row">
+        <span class="tracker-label">Weekly points used</span>
+        <input type="number" id="weeklyused" value="0" min="0" step="1" oninput="calcWeekly()" style="width:78px;">
+        <span class="unit">pts</span>
+      </div>
+      <div class="tracker-msg" id="weekly-msg">Weekly flex points remaining: 28</div>
+      <div class="bar-bg"><div class="bar-fill" id="weekly-bar"></div></div>
     </div>
-    <div class="step-bonus" id="step-bonus" style="background:#f2f2f7;color:#8e8e93;">Walk 7,000+ steps to earn +2 bonus points</div>
-    <div class="tracker-row">
-      <span class="tracker-label">Points used so far</span>
-      <input type="number" id="used" value="0" min="0" step="1" oninput="calc()" style="width:78px;">
-      <span class="unit">pts</span>
-    </div>
-    <div class="tracker-msg" id="tracker-msg">Enter your values above to track your budget.</div>
-    <div class="bar-bg"><div class="bar-fill" id="bar"></div></div>
-    <div class="bar-stats"><span id="b-used">0 used</span><span id="b-left">37 remaining</span></div>
+    <button class="btn-reset" onclick="resetTracker()">Reset tracker</button>
   </div>
-  <button class="btn-reset" onclick="resetAll()">Reset all fields</button>
-  <p class="footnote">Formula estimates only. Zero-point foods (eggs, fruit, veggies, lean proteins) - enter 0. Always verify with the official WW app.</p>
+
+  <!-- BUDGET TAB -->
+  <div class="panel" id="tab-budget">
+    <div class="section-label">Calculate your daily budget</div>
+    <div class="card">
+      <div class="input-row">
+        <div class="row-icon" style="background:#e8f4ff;">👤</div>
+        <div class="row-text"><div class="row-name">Gender</div></div>
+        <select id="b-gender">
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
+      <div class="input-row">
+        <div class="row-icon" style="background:#fff8e6;">🎂</div>
+        <div class="row-text"><div class="row-name">Age</div></div>
+        <input type="number" id="b-age" value="45" min="18" max="99" step="1">
+        <span class="unit">yrs</span>
+      </div>
+      <div class="input-row">
+        <div class="row-icon" style="background:#edfff3;">📏</div>
+        <div class="row-text"><div class="row-name">Height (inches)</div><div class="row-hint">e.g. 5'10 = 70 inches</div></div>
+        <input type="number" id="b-height" value="70" min="48" max="96" step="1">
+        <span class="unit">in</span>
+      </div>
+      <div class="input-row">
+        <div class="row-icon" style="background:#fff0f0;">⚖️</div>
+        <div class="row-text"><div class="row-name">Weight</div></div>
+        <input type="number" id="b-weight" value="180" min="80" max="500" step="1">
+        <span class="unit">lbs</span>
+      </div>
+      <div class="input-row">
+        <div class="row-icon" style="background:#e5fdf6;">🏃</div>
+        <div class="row-text"><div class="row-name">Activity level</div></div>
+        <select id="b-activity">
+          <option value="0">Sedentary</option>
+          <option value="1" selected>Lightly active</option>
+          <option value="2">Moderately active</option>
+          <option value="4">Very active</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn-calc" onclick="calcBudget()">Calculate my budget</button>
+    <div class="budget-result" id="budget-result" style="display:none;">
+      <div class="result-label" style="color:rgba(255,255,255,0.85);">Your estimated daily budget</div>
+      <div class="result-number" id="b-result">0</div>
+      <div class="result-word" style="color:rgba(255,255,255,0.9);font-size:18px;margin-top:4px;margin-bottom:12px;">points per day</div>
+      <div class="budget-breakdown" id="b-breakdown"></div>
+    </div>
+    <div class="weekly-box" id="weekly-info" style="display:none;">
+      <div class="tip-title">Weekly flex points</div>
+      <div class="tip-text" id="weekly-pts-text"></div>
+    </div>
+    <div class="card" id="budget-how" style="display:none;">
+      <div class="input-row" style="flex-direction:column;align-items:flex-start;gap:6px;">
+        <div class="row-name" style="font-weight:600;">How your budget is calculated</div>
+        <div class="row-hint" style="line-height:1.6;" id="b-formula-text"></div>
+      </div>
+    </div>
+    <p class="footnote" style="margin-top:8px;">This is an estimate based on publicly known WW formulas. For your exact official budget sign up with the WW app.</p>
+  </div>
+
+  <!-- TIPS TAB -->
+  <div class="panel" id="tab-tips">
+    <div class="section-label">Zero-point foods</div>
+    <p style="font-size:13px;color:#8e8e93;padding:0 20px 10px;">These foods cost you 0 points - eat freely!</p>
+    <div class="zero-grid">
+      <div class="zero-item"><span>🥚</span>Eggs</div>
+      <div class="zero-item"><span>🍎</span>All fruits</div>
+      <div class="zero-item"><span>🥦</span>Vegetables</div>
+      <div class="zero-item"><span>🐟</span>Fish & seafood</div>
+      <div class="zero-item"><span>🍗</span>Skinless chicken</div>
+      <div class="zero-item"><span>🫘</span>Beans & lentils</div>
+      <div class="zero-item"><span>🌽</span>Corn & oats</div>
+      <div class="zero-item"><span>🥔</span>Potatoes</div>
+      <div class="zero-item"><span>🍠</span>Sweet potatoes</div>
+      <div class="zero-item"><span>🧀</span>Non-fat yogurt</div>
+      <div class="zero-item"><span>🫘</span>Tofu & tempeh</div>
+      <div class="zero-item"><span>🍿</span>Popcorn</div>
+    </div>
+    <div class="section-label">Smart tips</div>
+    <div class="tip-card">
+      <div class="tip-icon">🛒</div>
+      <div class="tip-title">Build meals around zero-point foods</div>
+      <div class="tip-text">Start every meal with a zero-point base - eggs, fish, chicken, or vegetables - then add smaller amounts of higher-point ingredients. This stretches your budget further.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon">🍬</div>
+      <div class="tip-title">Added sugar is the biggest point driver</div>
+      <div class="tip-text">Added sugar adds points faster than almost anything else. Check labels carefully - sauces, dressings, breads, and yogurts often have hidden added sugars.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon">💪</div>
+      <div class="tip-title">Protein is your best friend</div>
+      <div class="tip-text">High-protein foods significantly lower points. Choose lean meats, eggs, fish, Greek yogurt, and beans to keep points low and stay full longer.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon">🚶</div>
+      <div class="tip-title">Walk your way to bonus points</div>
+      <div class="tip-text">Hitting 7,000+ steps a day earns you approximately 2 extra points. That is 14 extra points over a whole week!</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon">⚖️</div>
+      <div class="tip-title">Your budget changes as you lose weight</div>
+      <div class="tip-text">As your weight drops your daily budget will gradually decrease. Recalculate your budget in the My Budget tab every 10-15 lbs lost.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon">🥑</div>
+      <div class="tip-title">Healthy fats lower your points</div>
+      <div class="tip-text">Unsaturated fats from avocado, nuts, olive oil, and salmon actually reduce your point total. Don't fear healthy fats - they work in your favor on this plan.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon">📅</div>
+      <div class="tip-title">Use weekly flex points wisely</div>
+      <div class="tip-text">You get around 28 weekly flex points for treats, dining out, or special occasions. Unused flex points don't roll over but having them prevents feeling deprived.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon">🍞</div>
+      <div class="tip-title">Best breads for WW</div>
+      <div class="tip-text">Rye sourdough, whole grain, and sprouted grain breads are your best choices - higher fiber and protein, lower added sugar. Avoid white bread and sweet rolls.</div>
+    </div>
+    <p class="footnote">Always verify point values with the official WW app. Zero-point food lists may vary for diabetic or menopause plans.</p>
+  </div>
+
 </div>
 <script>
-function calc() {
+function showTab(name, el) {
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+  document.getElementById('tab-' + name).classList.add('active');
+  el.classList.add('active');
+}
+function calcFood() {
   var cal     = parseFloat(document.getElementById('cal').value)    || 0;
   var satfat  = parseFloat(document.getElementById('satfat').value) || 0;
   var sugar   = parseFloat(document.getElementById('sugar').value)  || 0;
   var protein = parseFloat(document.getElementById('protein').value)|| 0;
   var fiber   = parseFloat(document.getElementById('fiber').value)  || 0;
   var unsat   = parseFloat(document.getElementById('unsat').value)  || 0;
-  var steps   = parseInt(document.getElementById('steps').value)    || 0;
   var raw = (cal/50) + (satfat/13) + (sugar/10) - (protein/25) - (fiber/14) - (unsat/40);
   var pts = Math.max(0, Math.round(raw));
   document.getElementById('pts').textContent = pts;
@@ -136,40 +321,96 @@ function calc() {
   document.getElementById('p-sug').textContent = 'Sugar +'   + (sugar/10).toFixed(1);
   document.getElementById('p-pro').textContent = 'Protein -' + (protein/25).toFixed(1);
   document.getElementById('p-fib').textContent = 'Fiber -'   + (fiber/14).toFixed(1);
+}
+function resetFood() {
+  ['cal','satfat','sugar','protein','fiber','unsat'].forEach(function(id){ document.getElementById(id).value = 0; });
+  calcFood();
+}
+function calcTracker() {
+  var steps = parseInt(document.getElementById('steps').value) || 0;
   var stepBonus = steps >= 7000 ? 2 : 0;
   var bonusEl = document.getElementById('step-bonus');
   if (steps >= 7000) {
     bonusEl.textContent = steps.toLocaleString() + ' steps - +2 bonus points earned!';
-    bonusEl.style.background = '#edfff3';
-    bonusEl.style.color = '#1a7a3a';
+    bonusEl.style.background = '#edfff3'; bonusEl.style.color = '#1a7a3a';
   } else if (steps > 0) {
     bonusEl.textContent = (7000 - steps).toLocaleString() + ' more steps to earn +2 bonus points';
-    bonusEl.style.background = '#f2f2f7';
-    bonusEl.style.color = '#8e8e93';
+    bonusEl.style.background = '#f2f2f7'; bonusEl.style.color = '#8e8e93';
   } else {
     bonusEl.textContent = 'Walk 7,000+ steps to earn +2 bonus points';
-    bonusEl.style.background = '#f2f2f7';
-    bonusEl.style.color = '#8e8e93';
+    bonusEl.style.background = '#f2f2f7'; bonusEl.style.color = '#8e8e93';
   }
   var budget = (parseInt(document.getElementById('budget').value) || 37) + stepBonus;
-  var used   = parseInt(document.getElementById('used').value) || 0;
-  var total  = used + pts;
-  var remaining = Math.max(0, budget - total);
-  var pct = Math.min(100, Math.round((total / budget) * 100));
-  document.getElementById('b-used').textContent = total + ' used';
+  var used = parseInt(document.getElementById('used').value) || 0;
+  var remaining = Math.max(0, budget - used);
+  var pct = Math.min(100, Math.round((used / budget) * 100));
+  document.getElementById('b-used').textContent = used + ' used';
   document.getElementById('b-left').textContent = remaining + ' remaining';
   document.getElementById('bar').style.width = pct + '%';
   document.getElementById('bar').style.background = pct >= 100 ? '#ff3b30' : pct > 85 ? '#ff9500' : '#007aff';
   var msg = pct >= 100 ? 'Budget reached - use your weekly flex points!' :
             pct > 85  ? 'Getting close to your daily limit.' :
-            total === 0 ? 'Enter food values and points used today.' :
-            "You're on track for the day.";
+            used === 0 ? 'Enter points used today.' : "You're on track for the day.";
   document.getElementById('tracker-msg').textContent = msg;
+  calcWeekly();
 }
-function resetAll() {
-  ['cal','satfat','sugar','protein','fiber','unsat','used','steps'].forEach(function(id){ document.getElementById(id).value = 0; });
+function calcWeekly() {
+  var weekly = parseInt(document.getElementById('weekly').value) || 28;
+  var weeklyused = parseInt(document.getElementById('weeklyused').value) || 0;
+  var left = Math.max(0, weekly - weeklyused);
+  var pct = Math.min(100, Math.round((weeklyused / weekly) * 100));
+  document.getElementById('weekly-msg').textContent = 'Weekly flex points remaining: ' + left;
+  document.getElementById('weekly-bar').style.width = pct + '%';
+  document.getElementById('weekly-bar').style.background = pct >= 100 ? '#ff3b30' : pct > 85 ? '#ff9500' : '#34c759';
+}
+function resetTracker() {
+  ['used','steps','weeklyused'].forEach(function(id){ document.getElementById(id).value = 0; });
   document.getElementById('budget').value = 37;
-  calc();
+  document.getElementById('weekly').value = 28;
+  calcTracker();
+}
+function calcBudget() {
+  var gender   = document.getElementById('b-gender').value;
+  var age      = parseInt(document.getElementById('b-age').value) || 45;
+  var heightIn = parseInt(document.getElementById('b-height').value) || 70;
+  var weight   = parseInt(document.getElementById('b-weight').value) || 180;
+  var activity = parseInt(document.getElementById('b-activity').value);
+  var base  = gender === 'male' ? 14 : 8;
+  var wtPts = Math.round(weight / 10);
+  var htPts = heightIn < 61 ? 0 : heightIn < 69 ? 1 : 2;
+  var agePts = age < 35 ? 0 : age <= 50 ? -2 : age <= 65 ? -3 : -4;
+  var total = Math.max(20, base + wtPts + htPts + agePts + activity);
+  var weekly = Math.round(total * 0.75);
+  document.getElementById('b-result').textContent = total;
+  document.getElementById('budget-result').style.display = 'block';
+  document.getElementById('weekly-info').style.display = 'block';
+  document.getElementById('budget-how').style.display = 'block';
+  var breakdown = [
+    'Base (' + (gender === 'male' ? 'male' : 'female') + '): ' + base,
+    'Weight: +' + wtPts,
+    'Height: +' + htPts,
+    'Age: ' + agePts,
+    'Activity: +' + activity
+  ];
+  var bdEl = document.getElementById('b-breakdown');
+  bdEl.innerHTML = '';
+  breakdown.forEach(function(t){
+    var s = document.createElement('span');
+    s.className = 'budget-pill';
+    s.textContent = t;
+    bdEl.appendChild(s);
+  });
+  document.getElementById('weekly-pts-text').textContent = 'You also get approximately ' + weekly + ' weekly flex points to use anytime during the week for treats, dining out, or special occasions.';
+  document.getElementById('b-formula-text').innerHTML =
+    'Gender base: Male = 14, Female = 8<br>' +
+    'Weight: your weight in lbs divided by 10<br>' +
+    'Height: under 5\'1" = 0, 5\'1"-5\'8" = +1, 5\'9"+ = +2<br>' +
+    'Age: under 35 = 0, 35-50 = -2, 51-65 = -3, over 65 = -4<br>' +
+    'Activity: sedentary = 0, lightly active = +1, moderate = +2, very active = +4<br><br>' +
+    'As you lose weight recalculate here - your budget will gradually decrease.';
+  document.getElementById('budget').value = total;
+  document.getElementById('weekly').value = weekly;
+  calcTracker();
 }
 </script>
 </body>
